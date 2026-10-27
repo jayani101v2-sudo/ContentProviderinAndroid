@@ -37,13 +37,127 @@ Registeration Number : 212224100025
 
 ## activity_main.xml
 
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission
+        android:name="android.permission.READ_CONTACTS" />
+
+    <application
+        android:allowBackup="true"
+        android:label="ContentProviderExp"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ContentProviderExp">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+    </application>
+
+</manifest>
 
 
 ## MainActivity.java
 
 
+package com.example.contentproviderexp;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+public class MainActivity extends AppCompatActivity {
+
+    TextView contactsText;
+    int permissionCode = 1;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        contactsText = findViewById(R.id.contactsText);
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_CONTACTS},
+                    permissionCode);
+
+        } else {
+            displayContacts();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+            String[] permissions, int[] grantResults) {
+
+        super.onRequestPermissionsResult(
+                requestCode, permissions, grantResults);
+
+        if (requestCode == permissionCode
+                && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            displayContacts();
+
+        } else {
+            contactsText.setText("Permission denied.");
+        }
+    }
+
+    void displayContacts() {
+
+        Cursor cursor = getContentResolver().query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                null, null, null, null);
+
+        String details = "";
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+
+                String name = cursor.getString(
+                        cursor.getColumnIndexOrThrow(
+                                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+
+                String number = cursor.getString(
+                        cursor.getColumnIndexOrThrow(
+                                ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                details += "Name: " + name
+                        + "\nPhone: " + number + "\n\n";
+            }
+
+            cursor.close();
+        }
+
+        if (details.isEmpty()) {
+            details = "No contacts found.";
+        }
+
+        contactsText.setText(details);
+    }
+}
 
 
 

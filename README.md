@@ -1,5 +1,5 @@
 
-# Ex.No:3 Create Your Own Content Providers to get Contacts details.
+# Ex.No:4 Create Your Own Content Providers to get Contacts details.
 
 
 ## AIM:
@@ -165,12 +165,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
-
 ## OUTPUT
 
+<img width="1067" height="863" alt="image" src="https://github.com/user-attachments/assets/ed4a4781-b9df-463d-93a1-ae93e161875d" />
+<img width="1250" height="941" alt="image" src="https://github.com/user-attachments/assets/530e52da-24e5-4b3c-bf75-0ac51b3212f7" />
+
+<img width="202" height="455" alt="image" src="https://github.com/user-attachments/assets/0236fb17-bbae-4bfb-bea3-12cfd5ca0e44" />
 
 
 
